@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -42,6 +44,22 @@ class User implements UserInterface
      * @ORM\Column(type="string", length=255)
      */
     private $lastname;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Courses", mappedBy="users")
+     */
+    private $courses;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Grades", mappedBy="student", orphanRemoval=true)
+     */
+    private $grades;
+
+    public function __construct()
+    {
+        $this->courses = new ArrayCollection();
+        $this->grades = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -141,6 +159,65 @@ class User implements UserInterface
     public function setLastname(string $lastname): self
     {
         $this->lastname = $lastname;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Courses[]
+     */
+    public function getCourses(): Collection
+    {
+        return $this->courses;
+    }
+
+    public function addCourse(Courses $course): self
+    {
+        if (!$this->courses->contains($course)) {
+            $this->courses[] = $course;
+            $course->addUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCourse(Courses $course): self
+    {
+        if ($this->courses->contains($course)) {
+            $this->courses->removeElement($course);
+            $course->removeUser($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Grades[]
+     */
+    public function getGrades(): Collection
+    {
+        return $this->grades;
+    }
+
+    public function addGrade(Grades $grade): self
+    {
+        if (!$this->grades->contains($grade)) {
+            $this->grades[] = $grade;
+            $grade->setStudent($this);
+        }
+
+        return $this;
+    }
+
+    public function removeGrade(Grades $grade): self
+    {
+        if ($this->grades->contains($grade)) {
+            $this->grades->removeElement($grade);
+            // set the owning side to null (unless already changed)
+            if ($grade->getStudent() === $this) {
+                $grade->setStudent(null);
+            }
+        }
 
         return $this;
     }
