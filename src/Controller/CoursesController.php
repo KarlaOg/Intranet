@@ -30,6 +30,10 @@ class CoursesController extends AbstractController
      */
     public function new(Request $request): Response
     {
+        $securityContext = $this->container->get('security.authorization_checker');
+        if (!$securityContext->isGranted('ROLE_ADMIN')) {
+            return $this->redirectToRoute("courses_index");
+        }
         $course = new Courses();
         $form = $this->createForm(CoursesType::class, $course);
         $form->handleRequest($request);
