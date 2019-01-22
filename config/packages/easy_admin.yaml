@@ -24,4 +24,3 @@ easy_admin:
                 }
               }
             }
-          - { property: 'grades', label: 'Grades' }
