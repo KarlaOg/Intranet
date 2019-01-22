@@ -63,6 +63,10 @@ class User implements UserInterface
         $this->grades = new ArrayCollection();
     }
 
+    public function __toString() {
+        return $this->email;
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -173,7 +177,7 @@ class User implements UserInterface
         return $this->courses;
     }
 
-    public function addCourse(Courses $course): self
+    public function addCourses(Courses $course): self
     {
         if (!$this->courses->contains($course)) {
             $this->courses[] = $course;
@@ -183,7 +187,7 @@ class User implements UserInterface
         return $this;
     }
 
-    public function removeCourse(Courses $course): self
+    public function removeCourses(Courses $course): self
     {
         if ($this->courses->contains($course)) {
             $this->courses->removeElement($course);
@@ -201,7 +205,7 @@ class User implements UserInterface
         return $this->grades;
     }
 
-    public function addGrade(Grades $grade): self
+    public function addGrades(Grades $grade): self
     {
         if (!$this->grades->contains($grade)) {
             $this->grades[] = $grade;
@@ -211,7 +215,7 @@ class User implements UserInterface
         return $this;
     }
 
-    public function removeGrade(Grades $grade): self
+    public function removeGrades(Grades $grade): self
     {
         if ($this->grades->contains($grade)) {
             $this->grades->removeElement($grade);

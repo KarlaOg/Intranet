@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Courses;
+use App\Entity\User;
 use App\Form\CoursesType;
 use App\Repository\CoursesRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -35,6 +36,8 @@ class CoursesController extends AbstractController
             return $this->redirectToRoute("courses_index");
         }
         $course = new Courses();
+        $user = new User();
+        $course->addUser($user);
         $form = $this->createForm(CoursesType::class, $course);
         $form->handleRequest($request);
 
