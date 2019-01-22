@@ -1,6 +1,27 @@
 easy_admin:
-   entities:
-       # List the entity class name you want to manage
-       - App\Entity\Courses
-       - App\Entity\Grades
-       - App\Entity\User
+  entities:
+    Courses:
+      class: App\Entity\Courses
+      form:
+        fields:
+          - name
+          - users
+
+    Grades:
+      class: App\Entity\Grades
+    User:
+      class: App\Entity\User
+      edit:
+        fields:
+          - { property: 'firstname', label: 'Firstname' }
+          - { property: 'lastname', label: 'Lastname' }
+          - { property: 'email', label: 'EMail' }
+          - { property: 'roles', label: 'Rôles', type: 'choice', type_options: {
+              multiple: true, choices: {
+                'Student': 'ROLE_STUDENT',
+                'Administrator': 'ROLE_ADMIN',
+                'Teacher':'ROLE_PROFESSOR',
+                }
+              }
+            }
+          - { property: 'grades', label: 'Grades' }
