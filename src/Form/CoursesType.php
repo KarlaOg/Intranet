@@ -3,9 +3,11 @@
 namespace App\Form;
 
 use App\Entity\Courses;
+use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
 class CoursesType extends AbstractType
 {
@@ -13,7 +15,10 @@ class CoursesType extends AbstractType
     {
         $builder
             ->add('name')
-            ->add('users')
+            ->add('users', EntityType::class, [
+                'entry_type' => User::class,
+                'entry_options' => array('label' => false),
+            ])
         ;
     }
 
