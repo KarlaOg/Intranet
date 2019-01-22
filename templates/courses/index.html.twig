@@ -3,24 +3,37 @@
 {% block title %}Courses index{% endblock %}
 
 {% block body %}
+
     <h1>Courses index</h1>
 
     <h2>All courses</h2>
     <ul>
     {% for course in allCourses %}
-        <li>{{ course.name }}</li>
+        <li>
+            {{ course.name }}
+            {% if 'ROLE_STUDENT' in app.user.roles %}
+                {% if course not in userCourses %}
+                    <a href="register/{{ course.id }}"><button>Register</button></a>
+                {% endif %}
+            {% endif %}
+        </li>
     {% else %}
         <li>No courses found.</li>
     {% endfor %}
     </ul>
 
-    <h2>Your courses</h2>
-    <ul>
-        {% for course in userCourses %}
-            <li>{{ course.name }}</li>
-        {% else %}
-            <li>No courses found.</li>
-        {% endfor %}
-    </ul>
+    {% if 'ROLE_STUDENT' in app.user.roles %}
+        <h2>Your courses</h2>
+        <ul>
+            {% for course in userCourses %}
+                <li>{{ course.name }}</li>
+            {% else %}
+                <li>No courses found.</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    {% if 'ROLE_PROFESSOR' in app.user.roles %}
+    {% endif %}
 
 {% endblock %}

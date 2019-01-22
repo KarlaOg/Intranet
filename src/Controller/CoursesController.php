@@ -30,12 +30,14 @@ class CoursesController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="courses_show", methods={"GET"})
+     * @Route("/register/{id}", name="courses_register", methods={"GET"})
      */
-    public function show(Courses $course): Response
-    {
-        return $this->render('courses/show.html.twig', [
-            'course' => $course,
-        ]);
+    public function register(Courses $courses): Response{
+        $user = $this->getUser();
+        $entityManager = $this->getDoctrine()->getManager();
+        $user->addCourses($courses);
+        $entityManager->persist($courses);
+        $entityManager->flush();
+        return $this->redirectToRoute('courses_index');
     }
 }
