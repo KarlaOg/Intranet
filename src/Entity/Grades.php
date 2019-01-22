@@ -43,48 +43,48 @@ class Grades
         return $this->id;
     }
 
-    public function getGrade(): ?float
+    public function getGrades(): ?float
     {
         return $this->grade;
     }
 
-    public function setGrade(float $grade): self
+    public function setGrades(float $grade): self
     {
         $this->grade = $grade;
 
         return $this;
     }
 
-    public function getCourse(): ?Courses
+    public function getCourses(): ?Courses
     {
         return $this->course;
     }
 
-    public function setCourse(?Courses $course): self
+    public function setCourses(?Courses $course): self
     {
         $this->course = $course;
 
         return $this;
     }
 
-    public function getStudent(): ?User
+    public function getStudents(): ?User
     {
         return $this->student;
     }
 
-    public function setStudent(?User $student): self
+    public function setStudents(?User $student): self
     {
         $this->student = $student;
 
         return $this;
     }
 
-    public function getComment(): ?string
+    public function getComments(): ?string
     {
         return $this->comment;
     }
 
-    public function setComment(string $comment): self
+    public function setComments(string $comment): self
     {
         $this->comment = $comment;
 

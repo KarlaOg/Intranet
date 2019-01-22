@@ -59,12 +59,12 @@ class Courses
     /**
      * @return Collection|User[]
      */
-    public function getUser(): Collection
+    public function getUsers(): Collection
     {
         return $this->users;
     }
 
-    public function addUser(User $users): self
+    public function addUsers(User $users): self
     {
         if (!$this->users->contains($users)) {
             $this->users[] = $users;
@@ -73,7 +73,7 @@ class Courses
         return $this;
     }
 
-    public function removeUser(User $users): self
+    public function removeUsers(User $users): self
     {
         if ($this->users->contains($users)) {
             $this->users->removeElement($users);
@@ -90,7 +90,7 @@ class Courses
         return $this->grades;
     }
 
-    public function addGrade(Grades $grade): self
+    public function addGrades(Grades $grade): self
     {
         if (!$this->grades->contains($grade)) {
             $this->grades[] = $grade;
@@ -100,7 +100,7 @@ class Courses
         return $this;
     }
 
-    public function removeGrade(Grades $grade): self
+    public function removeGrades(Grades $grade): self
     {
         if ($this->grades->contains($grade)) {
             $this->grades->removeElement($grade);
