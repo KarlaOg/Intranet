@@ -26,18 +26,24 @@
         <ul>
             {% for course in userCourses %}
                 <li>{{ course.name }}</li>
-                <ul>
-                    Students
-                {% for key, student in students %}
-                    {% for studentEmail in student %}
-                        {% if key == course.id %}
-                            {% if app.user.username != studentEmail %}
-                                <li>{{ studentEmail }}</li>
+                {% if 'ROLE_PROFESSOR' in app.user.roles %}
+                    {% if students != null %}
+                    <ul>
+                        Students
+                    {% for key, student in students %}
+                        {% for studentEmail in student %}
+                            {% if key == course.id %}
+                                {% if app.user.username != studentEmail %}
+                                    <li>{{ studentEmail }}</li>
+                                {% endif %}
                             {% endif %}
-                        {% endif %}
+                        {% endfor %}
                     {% endfor %}
-                {% endfor %}
-                </ul>
+                    </ul>
+                    {% else %}
+                        No Student
+                    {% endif %}
+                {% endif %}
             {% else %}
                 <li>No courses found.</li>
             {% endfor %}
