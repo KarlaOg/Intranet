@@ -18,6 +18,7 @@
             </tr>
         </thead>
         <tbody>
+    
         {% for grade in grades %}
             <tr>
 <!--                <td>{{ grade.id }}</td>-->
@@ -31,11 +32,13 @@
                 </td>
                 {% endif %}
             </tr>
+          
         {% else %}
             <tr>
                 <td colspan="4">no records found</td>
             </tr>
         {% endfor %}
+          <p>Your average grade is {{average}}</p>
         </tbody>
     </table>
 

@@ -22,13 +22,25 @@ class GradesController extends AbstractController
      */
     public function index(GradesRepository $gradesRepository): Response
     {
+        
+        $allGrades = $gradesRepository->findByStudentId($this->getUser()->getId());
+        $sum = array_reduce($allGrades, function($carry, $item) {
+            $carry += $item->getGrade();
+            return $carry;
+            var_dump($carry);
+        }, 0);
+        $average = $sum/count($allGrades);
+
+
         return $this->render('grades/index.html.twig', [
-            'grades' => $gradesRepository->findAll(),
+            'grades' => $gradesRepository->findByStudentId($this->getUser()->getId()),
+            'average' => $average
         ]);
         //$this->getUser()->getGrades();
-        $this->getUser()->getCourses()->getGrades();        
+       // $this->getUser()->getCourses()->getGrades();      
     
     }
+
 
     /**
      * @Route("/new", name="grades_new", methods={"GET","POST"})
