@@ -9,29 +9,56 @@
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 
     </head>
-    <body>
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <body class="container">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
             <a class="navbar-brand" href="#">Intranet</a>
 
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto">
 
                     {% if app.user %}
+                        <!-- SI UTILISATEUR EST CO -->
 
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{path('grades_index')}}">My Grades</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{path('courses_index')}}">My Courses</a>
-                        </li>
-                    </ul>
+                        {% if "ROLE_STUDENT" in app.user.roles %}
+                            <!-- SI UTILISATEUR A LE ROLE STUDENT -->
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{path('grades_index')}}">My Grades</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{path('courses_index')}}">My Courses</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{path('grades_index')}}" class="badge badge-secondary">{{app.user.username}}</a>
+                            </li>
+                        </ul>
+                    {% elseif "ROLE_PROFESSOR" in app.user.roles %}
+                        <!-- SI UTILISATEUR A PAS LE ROLE STUDENT -->
+                        <ul class="navbar-nav mr-auto">
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{path('courses_index')}}">List student</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{path('grades_index')}}" class="badge badge-warning">{{app.user.username}}</a>
+                            </li>
+                        </ul>
+                    {% else %}
+                        <ul class="navbar-nav mr-auto">
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{path('courses_index')}}">List student</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href={{ path('easyadmin') }} class="badge badge-warning">{{app.user.username}}</a>
+                            </li>
+                        </ul>
+                    {% endif %}
+                    <!-- FIN IF ROLE STUDENT-->
                     <ul class="nav justify-content-end">
                         <li class="nav-item">
                             <a class="nav-link" href="{{path('app_logout')}}">Logout</a>
                         </li>
                     </ul>
-                     {% else %}
 
+                {% else %}
                     <li class="nav-item">
                         <a class="nav-link" href="{{path('app_login')}}">Login</a>
                     </li>

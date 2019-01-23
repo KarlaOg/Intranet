@@ -4,8 +4,10 @@
 
 {% block body %}
    
-<h1 class="display-4">Grades index</h1>
-    <table class="table table-bordered table-hover">
+<h1 class="display-4">Grades</h1>
+<small class="text-muted">All of you're grades.</small>
+        <hr>
+    <table class="table table table-hover">
         <thead class="thead-light" >
             <tr>
                 <!--<th >Id</th>-->
@@ -38,9 +40,8 @@
                 <td colspan="4">no records found</td>
             </tr>
         {% endfor %}
-          <p>Your average grade is {{average}}</p>
+          
         </tbody>
+        <p>{{average}}</p>
     </table>
-
-    <!--<a href="{{ path('grades_new') }}">Create new</a>--
 {% endblock %}

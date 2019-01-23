@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Courses;
 use App\Entity\User;
+use App\Service\CourseService;
 use App\Form\CoursesType;
 use App\Repository\CoursesRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -20,14 +21,13 @@ class CoursesController extends AbstractController
     /**
      * @Route("/", name="courses_index", methods={"GET"})
      */
-    public function index(CoursesRepository $coursesRepository): Response
+    public function index(CoursesRepository $coursesRepository, CourseService $courseService): Response
     {
         $getAllCourses = $coursesRepository->findAll();
         $getUserCourses = $this->getUser()->getCourses();
         $students = [];
-        foreach($getUserCourses as $key => $value){
-            $students[$value->getId()] = $value->getUsers();
-        }
+        $students = $courseService->removeTeacherAsStudent($getUserCourses, $students);
+        dump($students);
         return $this->render('courses/index.html.twig', [
             'allCourses' => $getAllCourses,
             'userCourses' => $getUserCourses,
