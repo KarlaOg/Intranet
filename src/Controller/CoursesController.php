@@ -10,6 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 /**
  * @Route("/courses")
@@ -23,6 +24,7 @@ class CoursesController extends AbstractController
     {
         $getAllCourses = $coursesRepository->findAll();
         $getUserCourses = $this->getUser()->getCourses();
+        $students = [];
         foreach($getUserCourses as $key => $value){
             $students[$value->getId()] = $value->getUsers();
         }
@@ -35,6 +37,7 @@ class CoursesController extends AbstractController
 
     /**
      * @Route("/register/{id}", name="courses_register", methods={"GET"})
+     * @IsGranted("ROLE_STUDENT")
      */
     public function register(Courses $courses): Response{
         $user = $this->getUser();
