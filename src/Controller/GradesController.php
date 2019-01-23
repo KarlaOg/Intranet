@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Grades;
 use App\Form\GradesType;
+use App\Repository\CoursesRepository;
 use App\Repository\GradesRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -43,11 +44,16 @@ class GradesController extends AbstractController
 
 
     /**
-     * @Route("/new", name="grades_new", methods={"GET","POST"})
+     * @Route("/new/{id}", name="grades_new", methods={"GET","POST"})
      */
-    public function new(Request $request): Response
+    public function new(CoursesRepository $coursesRepository,Request $request, $id): Response
     {
         $grade = new Grades();
+        $course = $coursesRepository->find($id);
+        $users = [];
+        foreach ($course->getUsers() as $value) {
+            $users[] = $value->getUsername();
+        }
         $form = $this->createForm(GradesType::class, $grade);
         $form->handleRequest($request);
 
