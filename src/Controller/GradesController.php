@@ -11,43 +11,34 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\User; 
 use App\Entity\Courses;
+use App\Service\GradeService;
+use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 /**
  * @Route("/grades")
+ * @IsGranted("ROLE_USER")
  */
 class GradesController extends AbstractController
 {
     /**
      * @Route("/", name="grades_index", methods={"GET"})
+     * @IsGranted("ROLE_STUDENT")
      */
-    public function index(GradesRepository $gradesRepository): Response
+    public function index(GradesRepository $gradesRepository, GradeService $gradeService): Response
     {
-        
         $allGrades = $gradesRepository->findByStudentId($this->getUser()->getId());
-        if (count($allGrades) === 0) {
-            $average = "No average has been recorded";
-        } else {
-            $sum = array_reduce($allGrades, function($carry, $item) {
-                $carry += $item->getGrade();
-                return $carry;
-                var_dump($carry);
-            }, 0);
-            $average = "Your average grade is : ".$sum/count($allGrades);
-        }
-
+        $average = $gradeService->countAverage($allGrades);
 
         return $this->render('grades/index.html.twig', [
             'grades' => $gradesRepository->findByStudentId($this->getUser()->getId()),
             'average' => $average
-        ]);
-        //$this->getUser()->getGrades();
-       // $this->getUser()->getCourses()->getGrades();      
-    
+        ]); 
     }
-
 
     /**
      * @Route("/new", name="grades_new", methods={"GET","POST"})
+     * @IsGranted("ROLE_PROFESSOR")
      */
     public function new(Request $request): Response
     {
@@ -70,17 +61,8 @@ class GradesController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="grades_show", methods={"GET"})
-     */
-    public function show(Grades $grade): Response
-    {
-        return $this->render('grades/show.html.twig', [
-            'grade' => $grade,
-        ]);
-    }
-
-    /**
      * @Route("/{id}/edit", name="grades_edit", methods={"GET","POST"})
+     * @IsGranted("ROLE_PROFESSOR")
      */
     public function edit(Request $request, Grades $grade): Response
     {
@@ -103,6 +85,7 @@ class GradesController extends AbstractController
 
     /**
      * @Route("/{id}", name="grades_delete", methods={"DELETE"})
+     * @IsGranted("ROLE_PROFESSOR")
      */
     public function delete(Request $request, Grades $grade): Response
     {
