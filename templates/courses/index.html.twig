@@ -3,33 +3,50 @@
 {% block title %}Courses index{% endblock %}
 
 {% block body %}
+
     <h1>Courses index</h1>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for course in courses %}
-            <tr>
-                <td>{{ course.id }}</td>
-                <td>{{ course.name }}</td>
-                <td>
-                    <a href="{{ path('courses_show', {'id': course.id}) }}">show</a>
-                    <a href="{{ path('courses_edit', {'id': course.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="3">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+    <h2>All courses</h2>
+    <ul>
+    {% for course in allCourses %}
+        <li>
+            {{ course.name }}
+            {% if 'ROLE_PROFESSOR' not in app.user.roles and 'ROLE_ADMIN' not in app.user.roles %}
+                {% if course not in userCourses %}
+                    <a href="register/{{ course.id }}"><button>Register</button></a>
+                {% endif %}
+            {% endif %}
+        </li>
+    {% else %}
+        <li>No courses found.</li>
+    {% endfor %}
+    </ul>
 
-    <a href="{{ path('courses_new') }}">Create new</a>
+        <h2>Your courses</h2>
+        <ul>
+            {% for course in userCourses %}
+                <li>{{ course.name }}</li>
+                {% if 'ROLE_PROFESSOR' in app.user.roles %}
+                    {% if students != null %}
+                    <ul>
+                        Students
+                    {% for key, student in students %}
+                        {% for studentEmail in student %}
+                            {% if key == course.id %}
+                                {% if app.user.username != studentEmail %}
+                                    <li>{{ studentEmail }}</li>
+                                {% endif %}
+                            {% endif %}
+                        {% endfor %}
+                    {% endfor %}
+                    </ul>
+                    {% else %}
+                        No student found
+                    {% endif %}
+                {% endif %}
+            {% else %}
+                <li>No courses found.</li>
+            {% endfor %}
+        </ul>
+
 {% endblock %}

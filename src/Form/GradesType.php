@@ -2,30 +2,27 @@
 
 namespace App\Form;
 
-use App\Entity\Courses;
-use App\Entity\User;
+use App\Entity\Grades;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
-class CoursesType extends AbstractType
+class GradesType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name')
-            ->add('users', EntityType::class, [
-                'entry_type' => User::class,
-                'entry_options' => array('label' => false),
-            ])
+            ->add('grade')
+            ->add('comment')
+            ->add('course')
+            ->add('student')
         ;
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => Courses::class,
+            'data_class' => Grades::class,
         ]);
     }
 }

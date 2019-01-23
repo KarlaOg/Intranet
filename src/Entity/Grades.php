@@ -38,6 +38,11 @@ class Grades
      */
     private $comment;
 
+
+    public function __toString() {
+        return (string)$this->grade;
+    }
+
     public function getId(): ?int
     {
         return $this->id;

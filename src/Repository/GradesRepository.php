@@ -36,15 +36,13 @@ class GradesRepository extends ServiceEntityRepository
     }
     */
 
-    /*
-    public function findOneBySomeField($value): ?Grades
+    public function findByStudentId($value)
     {
         return $this->createQueryBuilder('g')
-            ->andWhere('g.exampleField = :val')
+            ->andWhere('g.student = :val')
             ->setParameter('val', $value)
             ->getQuery()
-            ->getOneOrNullResult()
+            ->getResult()
         ;
     }
-    */
 }
