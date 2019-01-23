@@ -8,45 +8,49 @@
 
     <h2>All courses</h2>
     <ul>
-    {% for course in allCourses %}
-        <li>
-            {{ course.name }}
-            {% if 'ROLE_PROFESSOR' not in app.user.roles and 'ROLE_ADMIN' not in app.user.roles %}
-                {% if course not in userCourses %}
-                    <a href="register/{{ course.id }}"><button>Register</button></a>
-                {% endif %}
-            {% endif %}
-        </li>
-    {% else %}
-        <li>No courses found.</li>
-    {% endfor %}
-    </ul>
-
-        <h2>Your courses</h2>
-        <ul>
-            {% for course in userCourses %}
-                <li>{{ course.name }}</li>
-                {% if 'ROLE_PROFESSOR' in app.user.roles %}
-                    {% if students != null %}
-                    <ul>
-                        Students
-                    {% for key, student in students %}
-                        {% for studentEmail in student %}
-                            {% if key == course.id %}
-                                {% if app.user.username != studentEmail %}
-                                    <li>{{ studentEmail }}</li>
-                                {% endif %}
-                            {% endif %}
-                        {% endfor %}
-                    {% endfor %}
-                    </ul>
-                    {% else %}
-                        No student found
+        {% for course in allCourses %}
+            <li>
+                {{ course.name }}
+                {% if 'ROLE_PROFESSOR' not in app.user.roles and 'ROLE_ADMIN' not in app.user.roles %}
+                    {% if course not in userCourses %}
+                        <a href="register/{{ course.id }}"><button>Register</button></a>
                     {% endif %}
                 {% endif %}
-            {% else %}
-                <li>No courses found.</li>
-            {% endfor %}
-        </ul>
+            </li>
+        {% else %}
+            <li>No courses found.</li>
+        {% endfor %}
+    </ul>
+
+    {% if 'ROLE_ADMIN' not in app.user.roles %}
+
+    <h2>Your courses</h2>
+    <ul>
+        {% for course in userCourses %}
+            <li>{{ course.name }}</li>
+            {% if 'ROLE_PROFESSOR' in app.user.roles %}
+                {% if students != null %}
+                    <ul>
+                        Students
+                        {% for key, student in students %}
+                            {% for studentEmail in student %}
+                                {% if key == course.id %}
+                                    {% if app.user.username != studentEmail and "ROLE_ADMIN" not in studentEmail.roles %}
+                                        <li>{{ studentEmail }} <a href={{ path('grades_new', {'idCourse': course.id, 'idStudent': studentEmail.id}) }}> <button>Add grade</button></a></li>
+                                    {% endif %}
+                                {% endif %}
+                            {% endfor %}
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    No student found
+                {% endif %}
+            {% endif %}
+        {% else %}
+            <li>No courses found.</li>
+        {% endfor %}
+    </ul>
+
+    {% endif %}
 
 {% endblock %}

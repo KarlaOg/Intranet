@@ -5,6 +5,7 @@ namespace App\Form;
 use App\Entity\Grades;
 use App\Repository\CoursesRepository;
 use App\Repository\GradesRepository;
+use App\Service\CourseService;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormEvent;
@@ -16,30 +17,15 @@ class GradesType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-
-        dump($_GET);
+        $grades = new Grades();
         $builder
             ->add('grade')
-            ->add('comment')
-            ->add('course')
-            ->add('student', ChoiceType::class, [
-                'choices'  => [
-                    'users'
-                ],
-            ])
-        ;
+            ->add('comment');
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'users' => function(CoursesRepository $coursesRepository) {
-                $coursesRepository->find($_GET["id"]);
-                $users = [];
-                foreach ($course->getUsers() as $value) {
-                    $users[] = $value->getUsername();
-                }
-            },
             'data_class' => Grades::class,
         ]);
     }

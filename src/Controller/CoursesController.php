@@ -26,7 +26,8 @@ class CoursesController extends AbstractController
         $getAllCourses = $coursesRepository->findAll();
         $getUserCourses = $this->getUser()->getCourses();
         $students = [];
-        $courseService->removeTeacherAsStudent($getUserCourses, $students);
+        $students = $courseService->removeTeacherAsStudent($getUserCourses, $students);
+        dump($students);
         return $this->render('courses/index.html.twig', [
             'allCourses' => $getAllCourses,
             'userCourses' => $getUserCourses,

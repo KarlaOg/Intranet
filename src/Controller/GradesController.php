@@ -6,6 +6,8 @@ use App\Entity\Grades;
 use App\Form\GradesType;
 use App\Repository\CoursesRepository;
 use App\Repository\GradesRepository;
+use App\Repository\UserRepository;
+use App\Service\CourseService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -38,26 +40,27 @@ class GradesController extends AbstractController
     }
 
     /**
-     * @Route("/new", name="grades_new", methods={"GET","POST"})
+     * @Route("/new/{idCourse}/{idStudent}", name="grades_new", methods={"GET","POST"})
      * @IsGranted("ROLE_PROFESSOR")
      */
-    public function new(CoursesRepository $coursesRepository,Request $request, $id): Response
+    public function new(Request $request,UserRepository $userRepository,
+                        CoursesRepository $coursesRepository,$idCourse, $idStudent): Response
     {
         $grade = new Grades();
-        $course = $coursesRepository->find($id);
-        $users = [];
-        foreach ($course->getUsers() as $value) {
-            $users[] = $value->getUsername();
-        }
+        $course = $coursesRepository->find($idCourse);
+        $user = $userRepository->find($idStudent);
         $form = $this->createForm(GradesType::class, $grade);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
+            dump($grade);
+            $user->addGrades($grade);
+            $course->addGrades($grade);
             $entityManager->persist($grade);
             $entityManager->flush();
 
-            return $this->redirectToRoute('grades_index');
+            return $this->redirectToRoute('courses_index');
         }
 
         return $this->render('grades/new.html.twig', [
