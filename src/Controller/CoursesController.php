@@ -23,9 +23,13 @@ class CoursesController extends AbstractController
     {
         $getAllCourses = $coursesRepository->findAll();
         $getUserCourses = $this->getUser()->getCourses();
+        foreach($getUserCourses as $key => $value){
+            $students[$value->getId()] = $value->getUsers();
+        }
         return $this->render('courses/index.html.twig', [
             'allCourses' => $getAllCourses,
             'userCourses' => $getUserCourses,
+            'students' => $students
         ]);
     }
 
