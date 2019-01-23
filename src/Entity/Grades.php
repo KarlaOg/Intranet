@@ -38,6 +38,11 @@ class Grades
      */
     private $comment;
 
+
+    public function __toString() {
+        return (string)$this->grade;
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -48,7 +53,7 @@ class Grades
         return $this->grade;
     }
 
-    public function setGrades(float $grade): self
+    public function setGrade(float $grade): self
     {
         $this->grade = $grade;
 
@@ -60,19 +65,19 @@ class Grades
         return $this->course;
     }
 
-    public function setCourses(?Courses $course): self
+    public function setCourse(?Courses $course): self
     {
         $this->course = $course;
 
         return $this;
     }
 
-    public function getStudents(): ?User
+    public function getStudent(): ?User
     {
         return $this->student;
     }
 
-    public function setStudents(?User $student): self
+    public function setStudent(?User $student): self
     {
         $this->student = $student;
 
@@ -84,7 +89,7 @@ class Grades
         return $this->comment;
     }
 
-    public function setComments(string $comment): self
+    public function setComment(string $comment): self
     {
         $this->comment = $comment;
 
