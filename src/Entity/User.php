@@ -181,7 +181,7 @@ class User implements UserInterface
     {
         if (!$this->courses->contains($course)) {
             $this->courses[] = $course;
-            $course->addUser($this);
+            $course->addUsers($this);
         }
 
         return $this;
