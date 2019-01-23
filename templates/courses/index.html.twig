@@ -3,54 +3,73 @@
 {% block title %}Courses index{% endblock %}
 
 {% block body %}
+    <table class="table table table-hover">
+        <thead class="thead-light">
+            <tr>
+                <th>All courses</th>
+                <th>Your courses</th>
+                <th>Register</th>
+            </tr>
+        </thead>
+        <h1 class="display-4">Course Listing</h1>
+        <small class="text-muted">See all your classes and the one you can register for.</small>
+        <hr>
+        <tbody>
 
-    <h1>Courses index</h1>
-
-    <h2>All courses</h2>
-    <ul>
-        {% for course in allCourses %}
-            <li>
-                {{ course.name }}
+            {% for course in allCourses %}
+                <tr>
+                    <td>{{ course.name }}</td>
+                    <td>{{ course.name }}</td>
+                   
+               
                 {% if 'ROLE_PROFESSOR' not in app.user.roles and 'ROLE_ADMIN' not in app.user.roles %}
                     {% if course not in userCourses %}
-                        <a href="register/{{ course.id }}"><button>Register</button></a>
+                        <td><a href="register/{{ course.id }}">
+                            <button class ="btn btn-secondary">Register</button>
+                        </a></td>
                     {% endif %}
                 {% endif %}
-            </li>
-        {% else %}
-            <li>No courses found.</li>
-        {% endfor %}
-    </ul>
+            </tr>
+            {% else %}
+                No courses found.
+            {% endfor %}
 
-    {% if 'ROLE_ADMIN' not in app.user.roles %}
-
-    <h2>Your courses</h2>
-    <ul>
-        {% for course in userCourses %}
-            <li>{{ course.name }}</li>
+            {% for course in userCourses %}
+            <tr>
+              
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table table-hover">
+        <thead class="thead-light">
+            <tr>
+                <th>Students</th>
+                <th>Grade</th>
+            </tr>
+        </thead>
+        <tbody>
             {% if 'ROLE_PROFESSOR' in app.user.roles %}
                 {% if students != null %}
-                    <ul>
-                        Students
-                        {% for key, student in students %}
-                            {% for studentEmail in student %}
-                                {% if key == course.id %}
-                                    {% if app.user.username != studentEmail and "ROLE_ADMIN" not in studentEmail.roles %}
-                                        <li>{{ studentEmail }} <a href={{ path('grades_new', {'idCourse': course.id, 'idStudent': studentEmail.id}) }}> <button>Add grade</button></a></li>
-                                    {% endif %}
+                    {% for key, student in students %}
+                        {% for studentEmail in student %}
+                            {% if key == course.id %}
+                                {% if app.user.username != studentEmail and "ROLE_ADMIN" not in studentEmail.roles %}
+                                    <tr>
+                                        <td>{{ studentEmail }} <a href={{ path('grades_new', {'idCourse': course.id, 'idStudent': studentEmail.id}) }}></td>
+                                        <td><button class="btn btn-primary">Add grade</button></a></td>
+                                    </tr>
                                 {% endif %}
-                            {% endfor %}
+                            {% endif %}
                         {% endfor %}
-                    </ul>
+                    {% endfor %}
+
                 {% else %}
                     No student found
                 {% endif %}
             {% endif %}
-        {% else %}
-            <li>No courses found.</li>
-        {% endfor %}
-    </ul>
-
-    {% endif %}
-
+            {% else %}
+                No courses found.
+            {% endfor %}
+        </tbody>
+    </table>
 {% endblock %}
