@@ -43,7 +43,7 @@ class Grades
         return $this->id;
     }
 
-    public function getGrades(): ?float
+    public function getGrade(): ?float
     {
         return $this->grade;
     }
@@ -55,7 +55,7 @@ class Grades
         return $this;
     }
 
-    public function getCourses(): ?Courses
+    public function getCourse(): ?Courses
     {
         return $this->course;
     }
@@ -79,7 +79,7 @@ class Grades
         return $this;
     }
 
-    public function getComments(): ?string
+    public function getComment(): ?string
     {
         return $this->comment;
     }
