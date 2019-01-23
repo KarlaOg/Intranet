@@ -17,39 +17,42 @@
                 <ul class="navbar-nav mr-auto">
 
                     {% if app.user %}
+                        <!-- SI UTILISATEUR EST CO -->
+
                         {% if "ROLE_STUDENT" in app.user.roles %}
+                            <!-- SI UTILISATEUR A LE ROLE STUDENT -->
                             <li class="nav-item">
                                 <a class="nav-link" href="{{path('grades_index')}}">My Grades</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="{{path('courses_index')}}">My Courses</a>
                             </li>
+                             <li class="nav-item">
+                            <a href="{{path('grades_index')}}" class="badge badge-secondary">{{app.user.username}}</a>
+                        </li>
                         </ul>
                     {% else %}
-                        <ul>
+                        <!-- SI UTILISATEUR A PAS LE ROLE STUDENT -->
+                        <ul class="navbar-nav mr-auto">
                             <li class="nav-item">
-
                                 <a class="nav-link" href="{{path('grades_new')}}">Grade</a>
                             </li>
-
                             <li class="nav-item">
-
-                                <a class="nav-link" href="{{path('courses_index')}}">List student :</a>
+                                <a class="nav-link" href="{{path('courses_index')}}">List student</a>
                             </li>
+                            <li class="nav-item">
+                            <a href="{{path('grades_index')}}" class="badge badge-warning">{{app.user.username}}</a>
+                        </li>
                         </ul>
                     {% endif %}
+                    <!-- FIN IF ROLE STUDENT-->
                     <ul class="nav justify-content-end">
-
-                        <li class="nav-item">
-                            <a href="{{path('grades_index')}}" class="badge badge-secondary">{{app.user.username}}</a>
-
-                        </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{{path('app_logout')}}">Logout</a>
                         </li>
                     </ul>
-                {% else %}
 
+                {% else %}
                     <li class="nav-item">
                         <a class="nav-link" href="{{path('app_login')}}">Login</a>
                     </li>
