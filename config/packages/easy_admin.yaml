@@ -9,6 +9,7 @@ easy_admin:
 
     Grades:
       class: App\Entity\Grades
+      
     User:
       class: App\Entity\User
       edit:
