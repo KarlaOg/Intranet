@@ -24,12 +24,16 @@ class GradesController extends AbstractController
     {
         
         $allGrades = $gradesRepository->findByStudentId($this->getUser()->getId());
-        $sum = array_reduce($allGrades, function($carry, $item) {
-            $carry += $item->getGrade();
-            return $carry;
-            var_dump($carry);
-        }, 0);
-        $average = $sum/count($allGrades);
+        if (count($allGrades) === 0) {
+            $average = "No average has been recorded";
+        } else {
+            $sum = array_reduce($allGrades, function($carry, $item) {
+                $carry += $item->getGrade();
+                return $carry;
+                var_dump($carry);
+            }, 0);
+            $average = "Your average grade is : ".$sum/count($allGrades);
+        }
 
 
         return $this->render('grades/index.html.twig', [
