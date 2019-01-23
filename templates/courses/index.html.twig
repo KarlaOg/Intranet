@@ -11,7 +11,7 @@
     {% for course in allCourses %}
         <li>
             {{ course.name }}
-            {% if 'ROLE_STUDENT' in app.user.roles %}
+            {% if 'ROLE_PROFESSOR' not in app.user.roles %}
                 {% if course not in userCourses %}
                     <a href="register/{{ course.id }}"><button>Register</button></a>
                 {% endif %}
@@ -41,7 +41,7 @@
                     {% endfor %}
                     </ul>
                     {% else %}
-                        No Student
+                        No student found
                     {% endif %}
                 {% endif %}
             {% else %}
