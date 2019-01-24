@@ -47,6 +47,15 @@ class GradesController extends AbstractController
                         CoursesRepository $coursesRepository,$idCourse, $idStudent): Response
     {
         $grade = new Grades();
+        $user = $this->getUser();
+        $course = $coursesRepository->find($idCourse)->getUsers();
+        $data = [];
+        foreach ($course as $key => $value) {
+            $data[] = $value;
+        }
+        if (!in_array($user, $data)) {
+            throw new UnauthorizedHttpException("Not authorized to access this webpage");
+        }
         $course = $coursesRepository->find($idCourse);
         $user = $userRepository->find($idStudent);
         $form = $this->createForm(GradesType::class, $grade);
@@ -54,7 +63,6 @@ class GradesController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
-            dump($grade);
             $user->addGrades($grade);
             $course->addGrades($grade);
             $entityManager->persist($grade);
@@ -67,43 +75,5 @@ class GradesController extends AbstractController
             'grade' => $grade,
             'form' => $form->createView(),
         ]);
-    }
-
-    /**
-     * @Route("/{id}/edit", name="grades_edit", methods={"GET","POST"})
-     * @IsGranted("ROLE_PROFESSOR")
-     */
-    public function edit(Request $request, Grades $grade): Response
-    {
-        $form = $this->createForm(GradesType::class, $grade);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
-
-            return $this->redirectToRoute('grades_index', [
-                'id' => $grade->getId(),
-            ]);
-        }
-
-        return $this->render('grades/edit.html.twig', [
-            'grade' => $grade,
-            'form' => $form->createView(),
-        ]);
-    }
-
-    /**
-     * @Route("/{id}", name="grades_delete", methods={"DELETE"})
-     * @IsGranted("ROLE_PROFESSOR")
-     */
-    public function delete(Request $request, Grades $grade): Response
-    {
-        if ($this->isCsrfTokenValid('delete'.$grade->getId(), $request->request->get('_token'))) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($grade);
-            $entityManager->flush();
-        }
-
-        return $this->redirectToRoute('grades_index');
     }
 }

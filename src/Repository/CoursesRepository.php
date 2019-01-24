@@ -23,13 +23,13 @@ class CoursesRepository extends ServiceEntityRepository
     //  * @return Courses[] Returns an array of Courses objects
     //  */
     /*
-    public function findByExampleField($value)
+    public function findByProfessorId($value)
     {
         return $this->createQueryBuilder('c')
-            ->andWhere('c.exampleField = :val')
+            ->from("App\Entity\User", "u")
+            ->join("u.id", "id")
+            ->andWhere('id = :val')
             ->setParameter('val', $value)
-            ->orderBy('c.id', 'ASC')
-            ->setMaxResults(10)
             ->getQuery()
             ->getResult()
         ;
